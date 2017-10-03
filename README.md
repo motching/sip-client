@@ -2,11 +2,12 @@
 A SIP client, definitely not full-featured
 ### Todos
 
- - [X] Create project
-- [ ] Types for SIP messages
+- [X] Create project
+- [X] Basic types for SIP messages
 - [ ] Types for headers
+- [X] Parse request method
 - [ ] Parse Request-URI
-- [ ] Tests for Request-URI parsing
+- [ ] Tests for Request-Line parsing
 - [ ] Parse other headers (a general solution ideally)
 - [ ] Tests for general message parsing
 - [ ] Transaction management (requesting side)

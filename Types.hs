@@ -1,9 +1,13 @@
 module Types where
 
+type SipMessage = String
+
 type ResponseCode = Int
 
-responseText :: ResponseCode -> String
-responseText code =
+type Connection = String
+
+getResponseText :: ResponseCode -> String
+getResponseText code =
   case code of
     100 -> "Trying"
     180 -> "Ringing"
@@ -80,8 +84,8 @@ responseText code =
     607 -> "Unwanted"
     _ -> "INVALID RESPONSE CODE"
 
-methodText :: RequestMethod -> String
-methodText method =
+getMethodText :: RequestMethod -> String
+getMethodText method =
   case method of
       INVITE ->"INVITE"
       REGISTER -> "REGISTER"
@@ -97,6 +101,26 @@ methodText method =
       INFO -> "INFO"
       PRACK -> "PRACK"
       UPDATE -> "UPDATE"
+      INVALID -> "INVALID METHOD"
+
+getMethodType :: String -> RequestMethod
+getMethodType text =
+  case text of
+    "INVITE" -> INVITE
+    "REGISTER"     -> REGISTER
+    "BYE"   -> BYE
+    "ACK"   -> ACK
+    "CANCEL"  -> CANCEL
+    "OPTIONS" -> OPTIONS
+    "SUBSCRIBE" -> SUBSCRIBE
+    "NOTIFY" -> NOTIFY
+    "PUBLISH" -> PUBLISH
+    "REFER" -> REFER
+    "MESSAGE"  -> MESSAGE
+    "INFO"  -> INFO
+    "PRACK"  -> PRACK
+    "UPDATE"  -> UPDATE
+    _ -> INVALID
 
 data RequestMethod
   = INVITE
@@ -113,6 +137,7 @@ data RequestMethod
   | INFO
   | PRACK
   | UPDATE
+  | INVALID
   deriving (Show, Eq)
 
 peanut :: String
