@@ -4,4 +4,4 @@ import Input
 import Types
 
 main :: IO()
-main = listen Idle
+main = sipListen Idle

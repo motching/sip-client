@@ -144,4 +144,4 @@ data State
   = Idle
   | Connecting
   | Connected
- deriving (Eq)
+ deriving (Show, Eq)
