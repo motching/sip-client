@@ -1,7 +1,7 @@
 module Main where
 
-import Input
-import Types
+import SipClient.Input
+import SipClient.Types
 
 main :: IO()
 main = sipListen Idle

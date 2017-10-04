@@ -1,8 +1,8 @@
-module Input where
+module SipClient.Input where
 
-import Parser
+import SipClient.Parser
 --import StateHandling
-import Types
+import SipClient.Types
 
 import Network (listenOn, accept, PortID(..), Socket)
 import System.IO (hSetBuffering, hGetLine, hPutStrLn, BufferMode(..), Handle)

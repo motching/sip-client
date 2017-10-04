@@ -1,4 +1,4 @@
-module Types where
+module SipClient.Types where
 
 type SipMessage = String
 

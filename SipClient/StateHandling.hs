@@ -1,6 +1,6 @@
-module StateHandling where
+module SipClient.StateHandling where
 
-import Types
+import SipClient.Types
 
 newState :: RequestMethod -> State -> Bool
 newState method state =

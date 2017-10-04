@@ -1,6 +1,6 @@
-module Parser where
+module SipClient.Parser where
 
-import Types
+import SipClient.Types
 
 import Data.List.Split
 
