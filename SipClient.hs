@@ -1,22 +1,12 @@
 module Main where
 
+import Input
 import Types
---import Parser
-
-import Data.List.Split
-
-sipMessage :: Connection -> IO String
-sipMessage = readFile --for now
-
-requestMethod :: SipMessage -> RequestMethod
-requestMethod sm = do
-  let requestLine = head $ lines sm
-  let method = head $ splitOn " " requestLine
-  getMethodType method
+import Parser
 
 main :: IO()
 main = do
     message <- sipMessage "./message.bus"
-    let method = requestMethod message
+    let method = getRequestMethod message
     let methodName = getMethodText method
     putStrLn methodName

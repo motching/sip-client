@@ -139,6 +139,3 @@ data RequestMethod
   | UPDATE
   | INVALID
   deriving (Show, Eq)
-
-peanut :: String
-peanut = "peanut 2"

@@ -2,11 +2,10 @@ module Parser where
 
 import Types
 
-import Data.List
-import Data.String
+import Data.List.Split
 
--- requestMethod :: SipMessage -> RequestMethod
--- requestMethod sm = do
---   requestLine <- head $ lines sm
---   methodText <- head $ splitOn " " requestLine
---   methodText methodType
+getRequestMethod :: SipMessage -> RequestMethod
+getRequestMethod sm = do
+  let requestLine = head $ lines sm
+  let method = head $ splitOn " " requestLine
+  getMethodType method
