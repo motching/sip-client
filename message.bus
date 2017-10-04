@@ -1,4 +1,4 @@
-BYE sip:442088205173@kestral:5060 SIP/2.0
+INVITE sip:442088205173@kestral:5060 SIP/2.0
 Call-ID: 2c85dc22-5e10-4320-99ef-1dc954b3190a.1@cutlass.mxtelecom.com
 CSeq: 1 INVITE
 From: <tel:447813812431>;tag=t4BA6CFEC

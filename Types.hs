@@ -139,3 +139,9 @@ data RequestMethod
   | UPDATE
   | INVALID
   deriving (Show, Eq)
+
+data State
+  = Idle
+  | Connecting
+  | Connected
+ deriving (Eq)
