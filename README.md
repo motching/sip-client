@@ -6,6 +6,8 @@ A SIP client, definitely not full-featured
 - [X] Basic types for SIP messages
 - [ ] Types for headers
 - [X] Parse request method
+- [X] State handling
+- [X] Establish SIP/TCP connection
 - [ ] Parse Request-URI
 - [ ] Tests for Request-Line parsing
 - [ ] Parse other headers (a general solution ideally)
