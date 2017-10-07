@@ -1,7 +1,7 @@
 module Main where
 
-import SipClient.Input
 import SipClient.Types
+import SipClient.UdpConnection as UDP
 
 main :: IO()
-main = sipListen Idle
+main = UDP.listen Idle
