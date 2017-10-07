@@ -7,8 +7,11 @@ A SIP client, definitely not full-featured
 - [ ] Types for headers
 - [X] Parse request method
 - [X] State handling
-- [X] Establish SIP/TCP connection
+- [X] Establish SIP/UDP connection
+- [X] Construct and send a valid SIP message over UDP
 - [ ] Parse Request-URI
+- [ ] Send a semantically valid 100 Trying to an incoming INVITE
+- [ ] Minimal working voice call signaling
 - [ ] Tests for Request-Line parsing
 - [ ] Parse other headers (a general solution ideally)
 - [ ] Tests for general message parsing
@@ -18,3 +21,5 @@ A SIP client, definitely not full-featured
 - [ ] Dialog management (requesting side)
 - [ ] Dialog management (responding side)
 - [ ] Dialog test cases
+- [ ] TCP buffering
+- [ ] SDP parsing
