@@ -4,13 +4,14 @@ A SIP client, definitely not full-featured
 
 - [X] Create project
 - [X] Basic types for SIP messages
-- [ ] Types for headers
+- [X] Types for headers
 - [X] Parse request method
 - [X] State handling
 - [X] Establish SIP/UDP connection
 - [X] Construct and send a valid SIP message over UDP
 - [X] Change naive parsing: use attoparsec
 - [ ] Parse Request-URI
+- [ ] Parse mandatory headers necessary for constructing a 100 Trying message
 - [ ] Send a semantically valid 100 Trying to an incoming INVITE
 - [ ] Minimal working voice call signaling
 - [ ] Tests for Request-Line parsing
