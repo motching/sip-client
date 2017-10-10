@@ -4,7 +4,6 @@ import qualified SipClient.Builder as B
 import qualified SipClient.Parser as P
 import SipClient.Types
 
-import qualified Data.ByteString as DB
 import qualified Data.ByteString.Char8 as DBC
 import Network.Socket hiding (send, sendTo, recv, recvFrom)
 import Network.Socket.ByteString
@@ -16,7 +15,6 @@ listen state = withSocketsDo $ do
          _ <- bind s (addrAddress server) >> return s
          putStrLn "Server started ..."
          handleConnections s state
-
 
 handleConnections :: Socket -> State -> IO ()
 handleConnections sock state = do

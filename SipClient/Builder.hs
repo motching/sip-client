@@ -2,10 +2,10 @@ module SipClient.Builder where
 
 import SipClient.Types
 
-import qualified Data.ByteString as DB
 import qualified Data.ByteString.Char8 as DBC
+--import Builder!
 
-constructReply :: DB.ByteString -> DB.ByteString
+constructReply :: DBC.ByteString -> DBC.ByteString
 constructReply msg = do
                 let callId = "mopp" --P.parseCallId msg
                 let stringMsg = concat[ "SIP/2.0 100 Trying\r\n"
