@@ -162,4 +162,4 @@ data Header
   | Subject
   | ContentType
   | ContentLength
- deriving(Eq)
+ deriving(Show, Eq)
