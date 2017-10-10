@@ -1,6 +1,8 @@
 module SipClient.Types where
 
-type SipMessage = String
+import qualified Data.ByteString.Char8 as DBC
+
+type SipMessage = [(Header, DBC.ByteString)]
 
 type ResponseCode = Int
 

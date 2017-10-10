@@ -4,19 +4,17 @@ module SipClient.Parser where
 import Prelude hiding (takeWhile)
 import SipClient.Types
 
-import Data.Word (Word8)
+import Data.Word8
 import qualified Data.Attoparsec.ByteString as A
 import qualified Data.ByteString.Char8 as DBC
 
 parseOnly :: A.Parser a -> DBC.ByteString -> Either String a
 parseOnly = A.parseOnly
 
-isSpace :: Word8 -> Bool
-isSpace c = c /= toEnum(fromEnum ' ') --this is ugly
-
--- parseSipMessage :: A.Parser SipMessage
--- parseSipMessage = do
---   let method = parseReqMethod
+parseSipMessage :: A.Parser SipMessage
+parseSipMessage = do
+    method <- parseReqMethod
+    return [(ReqMethod, method)]
 
 parseReqMethod :: A.Parser DBC.ByteString
 parseReqMethod = A.takeWhile isSpace
