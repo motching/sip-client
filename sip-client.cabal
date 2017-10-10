@@ -19,6 +19,6 @@ executable sip-client
   main-is:             SipClient.hs
   -- other-modules:
   -- other-extensions:
-  build-depends:       base, split, network, bytestring
+  build-depends:       base, split, network, bytestring, attoparsec
   -- hs-source-dirs:
   default-language:    Haskell2010

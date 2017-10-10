@@ -9,6 +9,7 @@ A SIP client, definitely not full-featured
 - [X] State handling
 - [X] Establish SIP/UDP connection
 - [X] Construct and send a valid SIP message over UDP
+- [X] Change naive parsing: use attoparsec
 - [ ] Parse Request-URI
 - [ ] Send a semantically valid 100 Trying to an incoming INVITE
 - [ ] Minimal working voice call signaling
