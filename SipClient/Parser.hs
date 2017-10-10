@@ -1,6 +1,4 @@
 {-# Language OverloadedStrings #-}
-
-
 module SipClient.Parser where
 
 import Prelude hiding (takeWhile)

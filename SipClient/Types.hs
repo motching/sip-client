@@ -145,3 +145,19 @@ data State
   | Connecting
   | Connected
  deriving (Show, Eq)
+
+data Header
+  = ReqMethod
+  | SipVersion
+  | RequestUri
+  | Via
+  | From
+  | To
+  | CallId
+  | CSeq
+  | Contact
+  | MaxForwards
+  | Subject
+  | ContentType
+  | ContentLength
+ deriving(Eq)
