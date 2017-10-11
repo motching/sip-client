@@ -1,17 +1,21 @@
-{-# LANGUAGE BangPatterns #-}
-
 module SipClient.Builder where
 
 import qualified SipClient.Parser as P
 import SipClient.Types
-import qualified SipClient.Utils as U
 
 import qualified Data.ByteString.Char8 as DBC
 --import Builder!
-import Data.Either.Unwrap(fromRight)
 
-constructReply :: DBC.ByteString -> DBC.ByteString
-constructReply msg = do
-  let sipMessage = P.parseOnly P.parseSipMessage msg
-  let !debug = U.trace' $ show $ fromRight sipMessage
-  DBC.pack "noReply"
+parseInput :: DBC.ByteString -> Either String SipMessage
+parseInput = P.parseOnly P.parseSipMessage
+
+constructReply :: Either String SipMessage -> SipMessage
+constructReply msg = case msg of
+  Right sm -> sm
+  Left _ -> [(ReqMethod, DBC.pack "error geco")]
+
+buildOutput :: SipMessage -> DBC.ByteString
+buildOutput = return $ DBC.pack "hurra"
+
+answer :: DBC.ByteString -> DBC.ByteString
+answer msg = buildOutput $ constructReply $ parseInput msg
