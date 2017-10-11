@@ -14,10 +14,11 @@ parseOnly = A.parseOnly
 parseSipMessage :: A.Parser SipMessage
 parseSipMessage = do
     method <- parseReqMethod
+    --let !debug = U.trace' $ "parsed method" ++ show method
     return [(ReqMethod, method)]
 
 parseReqMethod :: A.Parser DBC.ByteString
-parseReqMethod = A.takeWhile isSpace
+parseReqMethod = A.takeTill isSpace
 
 sipVersionParser :: A.Parser DBC.ByteString
 sipVersionParser = A.string "SIP/2.0"
