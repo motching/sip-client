@@ -150,6 +150,7 @@ data State
 
 data Header
   = ReqMethod
+  | ResponseLine
   | SipVersion
   | RequestUri
   | Via

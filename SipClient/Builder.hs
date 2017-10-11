@@ -9,13 +9,30 @@ import qualified Data.ByteString.Char8 as DBC
 parseInput :: DBC.ByteString -> Either String SipMessage
 parseInput = P.parseOnly P.parseSipMessage
 
-constructReply :: Either String SipMessage -> SipMessage
-constructReply msg = case msg of
+checkInput :: Either String SipMessage -> SipMessage
+checkInput msg = case msg of
   Right sm -> sm
   Left _ -> [(ReqMethod, DBC.pack "error geco")]
 
+getReqMethod :: SipMessage -> DBC.ByteString
+getReqMethod msg = snd
+                   $ head --do we need this
+                   $ filter (\h -> fst h == ReqMethod) msg
+
+constructReply :: SipMessage -> SipMessage
+constructReply msg = do
+  let reqMethod = getReqMethod msg
+  let respCode = case DBC.unpack reqMethod of
+        "INVITE" -> "100"
+        _        -> "505"
+  let answerHeader = DBC.pack $ "SIP/2.0 " ++ respCode ++ " Trying"
+  return (ResponseLine, answerHeader) --why not list???
+
 buildOutput :: SipMessage -> DBC.ByteString
-buildOutput = return $ DBC.pack "hurra"
+buildOutput msg = snd $ head msg
 
 answer :: DBC.ByteString -> DBC.ByteString
-answer msg = buildOutput $ constructReply $ parseInput msg
+answer msg = buildOutput
+             $ constructReply
+             $ checkInput
+             $ parseInput msg
