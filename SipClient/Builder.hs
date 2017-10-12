@@ -20,13 +20,14 @@ getReqMethod msg = snd
                    $ filter (\h -> fst h == ReqMethod) msg
 
 constructReply :: SipMessage -> SipMessage
-constructReply msg = do
-  let reqMethod = getReqMethod msg
-  let respCode = case DBC.unpack reqMethod of
+constructReply msg = let
+  reqMethod = getReqMethod msg
+  respCode = case DBC.unpack reqMethod of
         "INVITE" -> "100"
         _        -> "505"
-  let answerHeader = DBC.pack $ "SIP/2.0 " ++ respCode ++ " Trying"
-  return (ResponseLine, answerHeader) --why not list???
+  answerHeader = DBC.pack $ "SIP/2.0 " ++ respCode ++ " Trying"
+  -- let callId = getCallId msg
+  in [(ResponseLine, answerHeader)] --why not list???
 
 buildOutput :: SipMessage -> DBC.ByteString
 buildOutput msg = snd $ head msg
