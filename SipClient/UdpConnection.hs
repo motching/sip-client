@@ -6,6 +6,7 @@ import qualified SipClient.Builder as B
 import SipClient.Types
 import qualified SipClient.Utils as U
 
+import qualified Data.ByteString.Char8 as DBC
 import Network.Socket hiding (send, sendTo, recv, recvFrom)
 import Network.Socket.ByteString
 
