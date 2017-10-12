@@ -1,13 +1,8 @@
---{-# Language OverloadedStrings #-}
-{-# LANGUAGE BangPatterns #-}
-
 module SipClient.Parser where
 
 import Prelude hiding (takeWhile)
 import SipClient.Types
-import qualified SipClient.Utils as U
 
-import Control.Applicative
 import Data.Word8
 import qualified Data.Attoparsec.ByteString as A
 import qualified Data.ByteString.Char8 as DBC
@@ -19,7 +14,6 @@ parseSipMessage :: A.Parser SipMessage
 parseSipMessage = do
     method <- parseReqMethod
     callId <- parseCallId
-    --let !debug = U.trace' $ "parsed method" ++ show method
     return [(ReqMethod, method)
            ,(CallId, callId)]
 
