@@ -6,7 +6,7 @@ type HeaderValue = DBC.ByteString
 type Header = (HeaderName, HeaderValue)
 
 data SipMessage = Request
-  { reqMethod :: DBC.ByteString
+  { reqMethod :: DBC.ByteString --ReqMethod
   , uriScheme :: DBC.ByteString
   , reqUri :: DBC.ByteString
   , sipVersion :: DBC.ByteString
@@ -19,7 +19,8 @@ data SipMessage = Request
   , reasonPhrase :: DBC.ByteString
   , headers :: [Header]
   , body :: DBC.ByteString
-  } deriving (Show)
+  } | BadMessage
+  deriving (Show)
 
 type ResponseCode = Int
 
