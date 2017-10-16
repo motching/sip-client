@@ -1,6 +1,7 @@
 module SipClient.Parser where
 
 import Prelude hiding (takeWhile)
+
 import SipClient.Types
 
 import Data.Word8 hiding (isSpace)
@@ -25,16 +26,26 @@ parseUntil cond = AB.takeTill cond <* AB.skipWhile cond
 
 parseSipMessage :: AB.Parser SipMessage
 parseSipMessage = do
-    reqMethod <-parseUntil isSpace
-    uriScheme <- parseUntil isColon
-    reqUri <- parseUntil isSpace
-    sipVersion <- parseUntil isEndOfLine
 
-    trace ("\nreqMethod: " ++ show reqMethod) return ()
-    trace ("\nuriScheme: " ++ show uriScheme) return ()
-    trace ("\nreqUri: " ++ show reqUri) return ()
-    trace ("\nsipVersion: " ++ show sipVersion) return ()
+
+    trace "\nboopp!" return ()
+
+    method <-parseUntil isSpace
+    scheme <- parseUntil isColon
+    uri <- parseUntil isSpace
+    version <- parseUntil isEndOfLine
+
+    trace ("\nreqMethod: " ++ show method) return ()
+    trace ("\nuriScheme: " ++ show scheme) return ()
+    trace ("\nreqUri: " ++ show uri) return ()
+    trace ("\nsipVersion: " ++ show version) return ()
 
     --trace ("\ncallId: " ++ show callId) return ()
     trace "\nall succeed!" return ()
-    return [(ReqMethod, reqMethod)]
+    return Request { reqMethod = method
+                   , uriScheme = scheme
+                   , reqUri = uri
+                   , sipVersion = version
+                   , headers = [(CallId, DBC.pack "call-id")]
+                   , body = DBC.pack "body"
+                   }

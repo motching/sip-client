@@ -1,10 +1,25 @@
 module SipClient.Types where
-
 import qualified Data.ByteString.Char8 as DBC
 
 type HeaderValue = DBC.ByteString
 
-type SipMessage = [(HeaderName, HeaderValue)]
+type Header = (HeaderName, HeaderValue)
+
+data SipMessage = Request
+  { reqMethod :: DBC.ByteString
+  , uriScheme :: DBC.ByteString
+  , reqUri :: DBC.ByteString
+  , sipVersion :: DBC.ByteString
+  , headers :: [Header]
+  , body :: DBC.ByteString
+  }
+  | Response
+  { sipVersion :: DBC.ByteString
+  , statusCode :: Int
+  , reasonPhrase :: DBC.ByteString
+  , headers :: [Header]
+  , body :: DBC.ByteString
+  } deriving (Show)
 
 type ResponseCode = Int
 
@@ -88,7 +103,7 @@ getResponseText code =
     607 -> "Unwanted"
     _ -> "INVALID RESPONSE CODE"
 
-getMethodText :: RequestMethod -> String
+getMethodText :: ReqMethod -> String
 getMethodText method =
   case method of
       INVITE ->"INVITE"
@@ -107,7 +122,7 @@ getMethodText method =
       UPDATE -> "UPDATE"
       INVALID -> "INVALID METHOD"
 
-getMethodType :: String -> RequestMethod
+getMethodType :: String -> ReqMethod
 getMethodType text =
   case text of
     "INVITE" -> INVITE
@@ -126,7 +141,7 @@ getMethodType text =
     "UPDATE"  -> UPDATE
     _ -> INVALID
 
-data RequestMethod
+data ReqMethod
   = INVITE
   | REGISTER
   | BYE
@@ -151,13 +166,7 @@ data State
  deriving (Show, Eq)
 
 data HeaderName
-  = ReqMethod
-  | UriScheme
-  | ReqUri
-  | RespLine
-  | SipVersion
-  | RequestUri
-  | Via
+  = Via
   | From
   | To
   | CallId
