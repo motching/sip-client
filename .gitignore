@@ -3,3 +3,4 @@ test/*.log
 tags
 TAGS
 run
+*.txt
