@@ -20,15 +20,15 @@ isSpace w = w == 32 || w == 9        --space or horizontal tab
 isColon :: Word8 -> Bool
 isColon w = w == 58                  -- colon
 
-skipSpace :: AB.Parser ()
-skipSpace = AB.skipWhile isSpace
+parseUntil :: (Word8 -> Bool) -> AB.Parser DBC.ByteString
+parseUntil cond = AB.takeTill cond <* AB.skipWhile cond
 
 parseSipMessage :: AB.Parser SipMessage
 parseSipMessage = do
-    reqMethod <- parseReqMethod
-    uriScheme <- parseUriScheme
-    reqUri <- parseReqUri
-    sipVersion <- parseSipVersion
+    reqMethod <-parseUntil isSpace
+    uriScheme <- parseUntil isColon
+    reqUri <- parseUntil isSpace
+    sipVersion <- parseUntil isEndOfLine
 
     trace ("\nreqMethod: " ++ show reqMethod) return ()
     trace ("\nuriScheme: " ++ show uriScheme) return ()
@@ -38,15 +38,3 @@ parseSipMessage = do
     --trace ("\ncallId: " ++ show callId) return ()
     trace "\nall succeed!" return ()
     return [(ReqMethod, reqMethod)]
-
-parseReqMethod :: AB.Parser DBC.ByteString
-parseReqMethod = AB.takeTill isSpace <* AB.skipWhile isSpace
-
-parseUriScheme :: AB.Parser DBC.ByteString
-parseUriScheme = AB.takeTill isColon <* AB.skipWhile isColon
-
-parseReqUri :: AB.Parser DBC.ByteString
-parseReqUri = AB.takeTill isSpace <* AB.skipWhile isSpace
-
-parseSipVersion :: AB.Parser DBC.ByteString
-parseSipVersion = AB.takeTill isEndOfLine <* AB.skipWhile isEndOfLine
