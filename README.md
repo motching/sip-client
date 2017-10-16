@@ -10,7 +10,7 @@ A SIP client, definitely not full-featured
 - [X] Establish SIP/UDP connection
 - [X] Construct and send a valid SIP message over UDP
 - [X] Change naive parsing: use attoparsec
-- [ ] Parse Request-URI
+- [X] Parse whole Request-Line
 - [ ] Parse mandatory headers necessary for constructing a 100 Trying message
 - [ ] Send a semantically valid 100 Trying to an incoming INVITE
 - [ ] Minimal working voice call signaling
@@ -25,3 +25,4 @@ A SIP client, definitely not full-featured
 - [ ] Dialog test cases
 - [ ] TCP buffering
 - [ ] SDP parsing
+- [ ] Strict mode / tolerant mode
