@@ -8,7 +8,7 @@ import Debug.Trace
 trace' :: String -> String
 trace' arg = traceShow arg arg
 
-printTuple2 :: (Header, DBC.ByteString) -> String
+printTuple2 :: (HeaderName, HeaderValue) -> String
 printTuple2 (header, content)= show header ++ ": " ++ DBC.unpack content
 
 printValidSipMsg :: SipMessage -> IO ()

@@ -2,7 +2,9 @@ module SipClient.Types where
 
 import qualified Data.ByteString.Char8 as DBC
 
-type SipMessage = [(Header, DBC.ByteString)]
+type HeaderValue = DBC.ByteString
+
+type SipMessage = [(HeaderName, HeaderValue)]
 
 type ResponseCode = Int
 
@@ -148,9 +150,11 @@ data State
   | Connected
  deriving (Show, Eq)
 
-data Header
+data HeaderName
   = ReqMethod
-  | ResponseLine
+  | UriScheme
+  | ReqUri
+  | RespLine
   | SipVersion
   | RequestUri
   | Via

@@ -18,7 +18,10 @@ listen state = withSocketsDo $ do
 handleConnections :: Socket -> State -> IO ()
 handleConnections sock state = do
   (msg, sender) <- recvFrom sock 1024
-  let reply = B.answer msg
-  putStrLn $ DBC.unpack reply
+  --putStrLn $ DBC.unpack msg
+  --putStrLn "\n"
+  let reply = B.answer msg --from here it's pure
+ -- putStrLn $ DBC.unpack reply
+  --putStrLn "\n"
   _ <- sendTo sock reply sender --returning: number of bytes sent
   handleConnections sock state
