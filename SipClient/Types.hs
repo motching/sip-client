@@ -6,7 +6,7 @@ type HeaderValue = DBC.ByteString
 type Header = (HeaderName, HeaderValue)
 
 data SipMessage = Request
-  { reqMethod :: DBC.ByteString --ReqMethod
+  { reqMethod :: DBC.ByteString --TODO ReqMethod?
   , uriScheme :: DBC.ByteString
   , reqUri :: DBC.ByteString
   , sipVersion :: DBC.ByteString
@@ -166,6 +166,8 @@ data State
   | Connected
  deriving (Show, Eq)
 
+--TODO string inconsistencies
+
 getHeaderNameFromText :: DBC.ByteString -> HeaderName
 getHeaderNameFromText text =
     case DBC.unpack text of
@@ -180,6 +182,21 @@ getHeaderNameFromText text =
     "Content-Type" ->  ContentType
     "Content-Length" ->  ContentLength
     _ -> InvalidHeader
+
+getHeaderText :: HeaderName -> String
+getHeaderText hn =
+      case hn of
+        Via -> "Via"
+        From -> "From"
+        To -> "To"
+        CallId -> "Call-ID"
+        CSeq -> "CSeq"
+        Contact -> "Contact"
+        MaxForwards -> "MaxForwards"
+        Subject -> "Subject"
+        ContentType -> "Content-Type"
+        ContentLength -> "Content-Length"
+        _ -> ""
 
 data HeaderName
   = Via

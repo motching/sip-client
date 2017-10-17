@@ -11,7 +11,7 @@ import qualified Data.Attoparsec.Combinator as AC
 import qualified Data.ByteString.Char8 as DBC
 
 checkInput :: Either String SipMessage -> SipMessage
-checkInput m | trace ("\ncheckInput: " ++ show m) False = undefined
+--checkInput m | trace ("\ncheckInput: " ++ show m ++ "\n") False = undefined
 checkInput msg =  case msg of
    Right sm -> sm
    Left _ -> BadMessage
@@ -60,7 +60,6 @@ parseSipMessage = do
     b <- AB.takeByteString
 
     -- trace ("\ncallId: " ++ show callId) return ()
-    trace "\nall succeed!" return ()
 
     return Request { reqMethod = method
                    , uriScheme = scheme

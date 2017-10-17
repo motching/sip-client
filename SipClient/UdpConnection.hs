@@ -21,7 +21,7 @@ handleConnections sock state = do
   --putStrLn $ DBC.unpack msg
   --putStrLn "\n"
   let reply = B.answer msg --from here it's pure
- -- putStrLn $ DBC.unpack reply
-  --putStrLn "\n"
+  putStrLn $ DBC.unpack reply
+  putStrLn "\n"
   _ <- sendTo sock reply sender --returning: number of bytes sent
   handleConnections sock state
