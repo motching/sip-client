@@ -12,7 +12,7 @@ printTuple2 :: (HeaderName, HeaderValue) -> String
 printTuple2 (header, content)= show header ++ ": " ++ DBC.unpack content
 
 printValidSipMsg :: SipMessage -> IO ()
-printValidSipMsg msg = putStrLn $ unlines $ map printTuple2 msg
+printValidSipMsg msg = putStrLn $ unlines $ map printTuple2 msg --TODO
 
 printSipMessage :: Either String SipMessage -> IO ()
 printSipMessage = either putStrLn printValidSipMsg

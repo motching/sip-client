@@ -7,17 +7,6 @@ import Debug.Trace
 import qualified Data.ByteString.Char8 as DBC
 --import Builder!
 
---move to parser?
-parseInput :: DBC.ByteString -> Either String SipMessage
---parseInput m | trace ("\nparseInput: " ++ show m) False = undefined
-parseInput = P.parseOnly P.parseSipMessage
-
-checkInput :: Either String SipMessage -> SipMessage
-checkInput m | trace ("\ncheckInput: " ++ show m) False = undefined
-checkInput msg =  case msg of
-   Right sm -> sm
-   Left _ -> BadMessage
-
 constructReply :: SipMessage -> SipMessage
 --constructReply m | trace ("\nconstructReply" ++ show m) False = undefined
 constructReply msg = let
@@ -46,5 +35,5 @@ buildOutput msg = DBC.pack $ show msg--DBC.pack "temp"
 answer :: DBC.ByteString -> DBC.ByteString
 answer msg = buildOutput
              $ constructReply
-             $ checkInput
-             $ parseInput msg
+             $ P.checkInput  --TODO move to parser?
+             $ P.parseInput msg

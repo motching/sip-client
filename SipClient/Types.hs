@@ -166,6 +166,21 @@ data State
   | Connected
  deriving (Show, Eq)
 
+getHeaderNameFromText :: DBC.ByteString -> HeaderName
+getHeaderNameFromText text =
+    case DBC.unpack text of
+    "Via" -> Via
+    "From" ->  From
+    "To" ->  To
+    "Call-ID" ->  CallId
+    "CSeq" ->  CSeq
+    "Contact" ->  Contact
+    "Max-Forwards" ->  MaxForwards
+    "Subject" ->  Subject
+    "Content-Type" ->  ContentType
+    "Content-Length" ->  ContentLength
+    _ -> InvalidHeader
+
 data HeaderName
   = Via
   | From
@@ -177,4 +192,5 @@ data HeaderName
   | Subject
   | ContentType
   | ContentLength
+  | InvalidHeader
  deriving(Show, Eq)
