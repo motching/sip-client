@@ -160,10 +160,16 @@ data ReqMethod
   | INVALID
   deriving (Show, Eq)
 
-data State
+data SipState
   = Idle
-  | Connecting
-  | Connected
+  | TInvReceived
+  | T100Sent
+  | T180Sent
+  | T183Sent
+  | T200Sent
+  | CallInProgress
+  | TByeReceived
+  | CallTerminated
  deriving (Show, Eq)
 
 --TODO string inconsistencies
