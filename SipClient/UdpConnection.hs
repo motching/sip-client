@@ -17,11 +17,16 @@ start = withSocketsDo $ do
          putStrLn "Server started ..."
          CM.void $ runStateT ( handleConnection sock) Idle
 
-handleConnection :: Socket -> StateT SipState IO ()
+sendMessage :: Socket -> DBC.ByteString -> SockAddr -> StateT SipState IO Int
+sendMessage sock reply sender = lift $ sendTo sock reply sender
+
+handleConnection :: Socket -> StateT SipState IO Int
 handleConnection sock = do
   (msg, sender) <- lift $ recvFrom sock 1024 --TODO where does lift come from?
-  let reply = B.answer msg --from here it's pure
-  lift $ putStrLn $ DBC.unpack reply
-  lift $ putStrLn "\n"
-  _ <- lift $ sendTo sock reply sender --returning: number of bytes sent
+  --TODO because we don't have state handling yet, we batch reply messages
+  let replies = B.answer msg --from here it's pure
+  -- lift $ putStrLn $ DBC.unpack replies
+  -- lift $ putStrLn "\n"
+  _ <- head $ map (\r -> sendMessage sock r sender) replies
+--  _ <- sendMessage sock replies sender  --returning: number of bytes sent
   handleConnection sock

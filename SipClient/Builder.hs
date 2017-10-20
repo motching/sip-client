@@ -10,22 +10,23 @@ import qualified Data.ByteString.Char8 as DBC
 assembleHeaders :: [Header] -> [Header]
 assembleHeaders hdrs = hdrs
 
-constructReply :: SipMessage -> SipMessage
+new100Trying :: SipMessage -> SipMessage
+new100Trying  msg = Response { sipVersion = sipVersion msg
+              , statusCode = 100
+              , reasonPhrase = DBC.pack "Trying"
+              , headers = assembleHeaders $ headers msg
+              , body = DBC.pack ""
+              }
+
+
+constructReply :: SipMessage -> [SipMessage]
 constructReply m | trace (show m ++ "\n") False = undefined
 constructReply msg = let
-
   method = reqMethod msg
-
-  respCode = case DBC.unpack method of
-        "INVITE" -> 100
-        _        -> 505
-
-  in Response { sipVersion = sipVersion msg
-                  , statusCode = respCode
-                  , reasonPhrase = DBC.pack $ getResponseText respCode
-                  , headers = assembleHeaders $ headers msg
-                  , body = DBC.pack ""
-                  }
+  ans = case DBC.unpack method of
+        "INVITE" -> [new100Trying msg]
+        _        -> []
+  in ans
 
 showHeader :: Header -> DBC.ByteString
 showHeader hdr = DBC.pack  (getHeaderText (fst hdr))
@@ -47,8 +48,8 @@ buildOutput msg = let
      `DBC.append`  newl
      `DBC.append`  hdrs
 
-answer :: DBC.ByteString -> DBC.ByteString
-answer msg = buildOutput
+answer :: DBC.ByteString -> [DBC.ByteString]
+answer msg = map buildOutput
              $ constructReply
              $ P.checkInput  --TODO move to parser?
              $ P.parseInput msg
