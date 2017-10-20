@@ -8,8 +8,8 @@ import qualified Data.ByteString.Char8 as DBC
 --TODO import Builder? probably overkill
 
 assembleHeaders :: [Header] -> [Header]
---assembleHeaders hdrs = hdrs
-assembleHeaders hdrs = [(Via, DBC.pack "oops")]--hdrs
+assembleHeaders hdrs = hdrs
+--assembleHeaders hdrs = [(Via, DBC.pack "oops")]--hdrs
 
 new100Trying :: SipMessage -> SipMessage
 new100Trying  msg = Response { sipVersion = sipVersion msg
