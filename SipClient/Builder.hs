@@ -18,13 +18,23 @@ new100Trying  msg = Response { sipVersion = sipVersion msg
               , body = DBC.pack ""
               }
 
+new180Ringing :: SipMessage -> SipMessage
+new180Ringing  msg = Response { sipVersion = sipVersion msg
+              , statusCode = 180
+              , reasonPhrase = DBC.pack "Ringing"
+              , headers = assembleHeaders $ headers msg
+              , body = DBC.pack ""
+              }
+
+
 
 constructReply :: SipMessage -> [SipMessage]
 constructReply m | trace (show m ++ "\n") False = undefined
 constructReply msg = let
   method = reqMethod msg
   ans = case DBC.unpack method of
-        "INVITE" -> [new100Trying msg]
+        "INVITE" -> [new100Trying msg
+                    ,new180Ringing msg]
         _        -> []
   in ans
 
