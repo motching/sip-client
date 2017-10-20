@@ -27,6 +27,21 @@ new180Ringing  msg = Response { sipVersion = sipVersion msg
               , body = DBC.pack ""
               }
 
+new183SessionProgress :: SipMessage -> SipMessage
+new183SessionProgress  msg = Response { sipVersion = sipVersion msg
+              , statusCode = 183
+              , reasonPhrase = DBC.pack "Session Progress"
+              , headers = assembleHeaders $ headers msg
+              , body = DBC.pack ""
+              }
+
+new200OK :: SipMessage -> SipMessage
+new200OK  msg = Response { sipVersion = sipVersion msg
+              , statusCode = 200
+              , reasonPhrase = DBC.pack "OK"
+              , headers = assembleHeaders $ headers msg
+              , body = DBC.pack ""
+              }
 
 
 constructReply :: SipMessage -> [SipMessage]
@@ -35,7 +50,11 @@ constructReply msg = let
   method = reqMethod msg
   ans = case DBC.unpack method of
         "INVITE" -> [new100Trying msg
-                    ,new180Ringing msg]
+                    ,new180Ringing msg
+                    ,new183SessionProgress msg
+                    ,new200OK msg
+                    ]
+        "BYE" -> [new200OK msg]
         _        -> []
   in ans
 
