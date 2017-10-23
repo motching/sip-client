@@ -1,5 +1,5 @@
 dist/
-test/*.log
+*.log
 tags
 TAGS
 run
