@@ -48,11 +48,13 @@
     ]]>
   </send>
 
-  <recv response="100"
-        optional="true">
+  <recv response="100" optional="true">
   </recv>
 
   <recv response="180" optional="true">
+  </recv>
+
+  <recv response="183" optional="true">
   </recv>
 
   <!-- By adding rrs="true" (Record Route Sets), the route sets         -->
