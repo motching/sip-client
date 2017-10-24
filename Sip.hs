@@ -5,11 +5,17 @@ import Control.Concurrent
 import Control.Monad
 import UI.NCurses
 
-main :: IO()
+hey :: IO ()
+hey = do
+  putStrLn "hey"
+  hey
+
+main :: IO ()
 main = do
-  _ <- forkOS UDP.start
-  --hey
-  startUI
+--  _ <- forkIO hey
+  _ <- forkOS startUI
+  UDP.start
+
 
 startUI :: IO ()
 startUI =
