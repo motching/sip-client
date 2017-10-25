@@ -217,3 +217,7 @@ data HeaderName
   | ContentLength
   | InvalidHeader
  deriving(Show, Eq)
+
+data UIData = Data
+  { numOfInCalls :: Int
+  , numOfOutCalls :: Int }

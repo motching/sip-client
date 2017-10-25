@@ -1,10 +1,12 @@
 module SipClient.UI where
 
+import SipClient.Types
+
 import Control.Monad
 import UI.NCurses
 
-startUI :: IO ()
-startUI =
+drawUI :: UIData -> IO ()
+drawUI d =
   runCurses $ do
     setEcho False
     w <- defaultWindow
