@@ -5,6 +5,12 @@ import SipClient.Types
 import Control.Monad
 import UI.NCurses
 
+statusLine :: UIData -> String
+statusLine d = "Number of incoming calls: "
+               ++ show (numOfInCalls d)
+               ++ "\tNumber of outgoing calls: "
+               ++ show (numOfOutCalls d)
+
 drawUI :: UIData -> IO ()
 drawUI d =
   runCurses $ do
@@ -12,7 +18,7 @@ drawUI d =
     w <- defaultWindow
     updateWindow w $ do
       moveCursor 10 10
-      drawString "Hey!"
+      drawString $ statusLine d
       moveCursor 12 10
       drawString "c to place a call"
     render
