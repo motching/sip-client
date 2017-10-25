@@ -1,6 +1,6 @@
 import SipClient.Log
+import qualified SipClient.TermLogic as Term
 import SipClient.Types
-import qualified SipClient.UdpConnection as UDP
 import SipClient.UI
 
 import Control.Concurrent
@@ -13,4 +13,4 @@ main :: IO ()
 main = do
    eraseAllLogs
    _ <- forkIO $ drawUI initData
-   UDP.start
+   Term.listen
