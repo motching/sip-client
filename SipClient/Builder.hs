@@ -45,7 +45,7 @@ new200OK  msg = Response { sipVersion = sipVersion msg
 
 
 constructReply :: SipMessage -> [SipMessage]
---constructReply m | trace (show m ++ "\n") False = undefined
+constructReply m | trace (show m ++ "\n") False = undefined
 constructReply msg = let
   method = reqMethod msg
   ans = case DBC.unpack method of

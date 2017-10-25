@@ -11,14 +11,14 @@ debugFile = "debug.log"
 
 eraseAllLogs :: IO ()
 eraseAllLogs = mapM_
-               (`writeFile` "")
+               (`appendFile` "")
                [msgLogFile, errLogFile, debugFile]
 
 writeMsgLog :: String -> IO ()
-writeMsgLog s = writeFile msgLogFile (s ++ "\n")
+writeMsgLog s = appendFile msgLogFile (s ++ "\n")
 
 writeErrorLog :: String -> IO ()
-writeErrorLog s = writeFile msgLogFile (s ++ "\n")
+writeErrorLog s = appendFile msgLogFile (s ++ "\n")
 
 writeDebugLog :: String -> IO ()
-writeDebugLog s = writeFile debugFile (s ++ "\n")
+writeDebugLog s = appendFile debugFile (s ++ "\n")
