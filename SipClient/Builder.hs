@@ -11,6 +11,15 @@ assembleHeaders :: [Header] -> [Header]
 assembleHeaders hdrs = hdrs
 --assembleHeaders hdrs = [(Via, DBC.pack "oops")]--hdrs
 
+newInvite :: SipMessage
+newInvite = Request { reqMethod = DBC.pack "INVITE"
+                    , uriScheme = DBC.pack "sip"
+                    , reqUri = DBC.pack "bela@kocsma.hu"
+                    , sipVersion = DBC.pack "SIP/2.0"
+                    , headers = []
+                    , body = DBC.pack "body"
+                    }
+
 new100Trying :: SipMessage -> SipMessage
 new100Trying  msg = Response { sipVersion = sipVersion msg
               , statusCode = 100

@@ -1,5 +1,6 @@
 import SipClient.Log
 import qualified SipClient.TermLogic as Term
+import qualified SipClient.OrigLogic as Orig
 import SipClient.Types
 import SipClient.UI
 
@@ -13,4 +14,6 @@ main :: IO ()
 main = do
    eraseAllLogs
    _ <- forkIO $ drawUI initData
-   Term.listen
+   _ <- forkIO Term.listen
+   _ <- forkIO Orig.wait
+   return ()
