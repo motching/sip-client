@@ -1,5 +1,6 @@
 module SipClient.UdpConnection where
 
+import SipClient.Log
 import qualified SipClient.Builder as B
 --import SipClient.Types
 
@@ -15,7 +16,7 @@ start = withSocketsDo $ do
          (server:_) <- getAddrInfo Nothing (Just "localhost") (Just "1234")
          sock <- socket (addrFamily server) Datagram defaultProtocol
          _ <- bind sock (addrAddress server)
-         --putStrLn "Server started ..."
+         writeDebugLog "Server started ..."
          handleConnection sock
 
 handleConnection :: Socket -> IO ()
@@ -36,6 +37,5 @@ sendMessages sock replies sender =
 
 printAndSend :: Socket -> DBC.ByteString -> SockAddr -> IO Int
 printAndSend sock reply sender = do
---  putStrLn $ DBC.unpack reply
- -- putStrLn "\n"
+  writeMsgLog $ DBC.unpack reply
   sendTo sock reply sender
