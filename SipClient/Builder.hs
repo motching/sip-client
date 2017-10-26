@@ -1,6 +1,5 @@
 module SipClient.Builder where
 
-import qualified SipClient.Parser as P
 import SipClient.Types
 
 import Debug.Trace
@@ -87,10 +86,8 @@ buildOutput msg = let
      `DBC.append`  newl
      `DBC.append`  hdrs
 
-answer :: DBC.ByteString -> [DBC.ByteString]
+answer :: SipMessage -> [DBC.ByteString]
 answer msg = map buildOutput
-             $ constructReply
-             $ P.checkInput  --TODO move to parser?
-             $ P.parseInput msg
+             $ constructReply msg
 
   --TODO: default bytestrings
