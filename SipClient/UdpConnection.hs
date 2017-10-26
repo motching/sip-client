@@ -9,14 +9,13 @@ import Network.Socket hiding (send, sendTo, recv, recvFrom)
 import Network.Socket.ByteString
 import System.IO.Unsafe
 
-newSocket :: (Socket -> UIData -> IO ()) -> TVar UIData ->  IO ()
+newSocket :: (Socket -> TVar UIData -> IO ()) -> TVar UIData ->  IO ()
 newSocket handler uid = withSocketsDo $ do
          (server:_) <- getAddrInfo Nothing (Just "localhost") (Just "1234")
          sock <- socket (addrFamily server) Datagram defaultProtocol
          _ <- bind sock (addrAddress server)
          writeDebugLog "Socket created ..."
-         let pureUid = unsafePerformIO $ readTVarIO uid
-         handler sock pureUid
+         handler sock uid
 
 sendMessages :: Socket -> [DBC.ByteString] -> SockAddr -> IO Int
 sendMessages sock replies recipient =
