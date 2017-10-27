@@ -218,6 +218,9 @@ data HeaderName
   | InvalidHeader
  deriving(Show, Eq)
 
+data TransDirection = Orig | Term
+
 data UIData = Data
   { numOfInCalls :: Int
   , numOfOutCalls :: Int }
+  deriving (Eq, Show)

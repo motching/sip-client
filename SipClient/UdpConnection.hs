@@ -7,7 +7,6 @@ import Control.Concurrent.STM
 import qualified Data.ByteString.Char8 as DBC
 import Network.Socket hiding (send, sendTo, recv, recvFrom)
 import Network.Socket.ByteString
-import System.IO.Unsafe
 
 newSocket :: (Socket -> TVar UIData -> IO ()) -> TVar UIData ->  IO ()
 newSocket handler uid = withSocketsDo $ do

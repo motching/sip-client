@@ -15,8 +15,9 @@ main :: IO ()
 main = do
    uiData <- atomically $ newTVar initData
    eraseAllLogs
+   _ <- forkIO $ drawUI uiData
    _ <- forkIO $ Term.listen uiData
-   drawUI uiData
+   _ <- forkIO $ Orig.wait uiData
    c <- getChar
-   putChar c
-   -- _ <- forkIO Orig.wait
+   -- putChar c
+   return ()

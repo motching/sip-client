@@ -27,8 +27,8 @@ handleTermConnection sock uiData = do
   let rm = getMethodType
         $ DBC.unpack
         $ reqMethod parsedMsg
-  refreshUI rm uiData
-  drawUI uiData
+  refreshUI Term rm uiData
+  --drawUI uiData
   let replies = B.answer parsedMsg --from here it's pure
   _ <- UDP.sendMessages sock replies sender
   handleTermConnection sock uiData

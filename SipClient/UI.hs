@@ -2,10 +2,12 @@ module SipClient.UI where
 
 import SipClient.Types
 
+import Control.Monad
 import Control.Concurrent.STM
+import System.Process
 
-refreshUI :: ReqMethod -> TVar UIData -> IO ()
-refreshUI rm uiData = case rm of
+refreshUI :: TransDirection -> ReqMethod -> TVar UIData -> IO ()
+refreshUI dir rm uiData = case rm of
                         INVITE -> atomically $ modifyTVar uiData addInCall
                         _ -> return ()
 
@@ -23,7 +25,15 @@ statusLine d = "Number of incoming calls: "
                  ++ "\tNumber of outgoing calls: "
                  ++ show (numOfOutCalls d)
 
+waitForChange :: UIData -> TVar UIData -> IO ()
+waitForChange uid td = do
+    tdFinal <- atomically $ readTVar td
+    when (uid == tdFinal) $ waitForChange uid td
+
 drawUI :: TVar UIData -> IO ()
-drawUI d = do
-  uid <- atomically $ readTVar d
-  putStrLn $ statusLine uid
+drawUI td = do
+  tdFinal <- atomically $ readTVar td
+  waitForChange tdFinal td
+  callCommand "clear"
+  print tdFinal
+  drawUI td
