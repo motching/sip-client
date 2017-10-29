@@ -8,19 +8,14 @@ import SipClient.UI
 import qualified Data.Bits as Bit
 import Data.Word
 import Control.Concurrent.STM
-import Network.Socket hiding (send, sendTo, recv, recvFrom)
+import Network.Socket
 
-wait :: TVar UIData -> IO ()
-wait uiData = do
+wait :: Socket -> TVar UIData -> IO ()
+wait sock uiData = do
   command <- getChar
   case command of
-    'c' -> startCall uiData
-    _  -> wait uiData
-
-startCall :: TVar UIData -> IO ()
-startCall tv = do
-    putStrLn $ "IP 2: " ++ show defaultRecipient
-    UDP.newSocket makeCall tv
+    'c' -> makeCall sock uiData
+    _  -> wait sock uiData
 
 packIP :: Int -> Int -> Int -> Int -> Word32
 packIP a b c d = Bit.shift (fromIntegral d) 24

@@ -2,6 +2,7 @@ import SipClient.Log
 import qualified SipClient.TermLogic as Term
 import qualified SipClient.OrigLogic as Orig
 import SipClient.Types
+import SipClient.UdpConnection
 import SipClient.UI
 
 import Control.Concurrent
@@ -16,8 +17,7 @@ main = do
    uiData <- atomically $ newTVar initData
    eraseAllLogs
    _ <- forkIO $ drawUI uiData
-   _ <- forkIO $ Term.listen uiData
-   _ <- forkIO $ Orig.wait uiData
-   c <- getChar
-   -- putChar c
+   sock <- newSocket
+   _ <- forkIO $ Term.listen sock uiData
+   Orig.wait sock uiData
    return ()
