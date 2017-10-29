@@ -11,7 +11,7 @@ debugFile = "debug.log"
 
 eraseAllLogs :: IO ()
 eraseAllLogs = mapM_
-               (`appendFile` "")
+               (`writeFile` "")
                [msgLogFile, errLogFile, debugFile]
 
 writeMsgLog :: String -> IO ()
