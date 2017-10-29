@@ -29,5 +29,6 @@ executable sip-client
                      , mtl
                      , ncurses
                      , stm
+                     , process
   -- hs-source-dirs:
   default-language:    Haskell2010
