@@ -18,7 +18,7 @@ main = do
    initUI
    _ <- forkIO $ drawUI uiData
    sock <- newSocket
-   _ <- forkIO $ Trans.listenOnUdp sock uiData
+   _ <- forkIO $ Trans.listenOnUdp Term sock uiData
    Trans.waitForInput sock uiData
    exitUI
    return ()

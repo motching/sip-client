@@ -4,15 +4,16 @@ import SipClient.Types
 
 import Control.Monad
 import Control.Concurrent.STM
+import qualified Data.ByteString.Char8 as DBC
 import System.IO
 import System.Console.ANSI
 
 initUI :: IO ()
 initUI = do
   hSetBuffering stdin NoBuffering
-  --clearScreen
+  clearScreen
   --hideCursor
-  hSetEcho stdin False
+  --hSetEcho stdin False
   setTitle "SIP station 0.1"
 
 exitUI :: IO ()
@@ -24,14 +25,22 @@ exitUI = do
   putStrLn "Bye!"
   showCursor
 
-refreshUI :: TransDirection -> ReqMethod -> TVar UIData -> IO ()
-refreshUI dir rm uiData =
+getReqMethod :: SipMessage -> ReqMethod
+getReqMethod msg = case msg of
+  Request {} -> getMethodType
+                $ DBC.unpack
+                $ reqMethod msg
+  _ -> INVALID
+
+
+refreshUI :: TransDirection -> SipMessage -> TVar UIData -> IO ()
+refreshUI dir msg uiData =
   case dir of
-    Term -> case rm of
+    Term -> case getReqMethod msg of
               INVITE -> atomically $ modifyTVar uiData addInCall
               BYE -> atomically $ modifyTVar uiData removeInCall
               _ -> return ()
-    Orig -> case rm of
+    Orig -> case getReqMethod msg of
               INVITE -> atomically $ modifyTVar uiData addOutCall
               BYE -> atomically $ modifyTVar uiData removeOutCall
               _ -> return ()

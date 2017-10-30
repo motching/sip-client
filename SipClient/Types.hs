@@ -21,7 +21,7 @@ data SipMessage = Request
   , body :: DBC.ByteString
   }
   | BadMessage
-  deriving (Show)
+  deriving (Eq, Show)
 
 type ResponseCode = Int
 
