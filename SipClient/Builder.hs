@@ -72,19 +72,42 @@ showHeader hdr = DBC.pack  (getHeaderText (fst hdr))
                  `DBC.append` snd hdr
 
 buildOutput :: SipMessage -> DBC.ByteString
-buildOutput msg = let
-  --TODO clean up this mess
-  newl = DBC.pack "\r\n"
-  hdrtxt = fmap showHeader (headers msg)
-  hdrs = DBC.intercalate newl hdrtxt
+buildOutput msg = case msg of
 
-  in sipVersion msg
-     `DBC.append`  DBC.pack " "
-     `DBC.append`  DBC.pack (show (statusCode msg))
-     `DBC.append`  DBC.pack " "
-     `DBC.append`  reasonPhrase msg
-     `DBC.append`  newl
-     `DBC.append`  hdrs
+  Response {} -> let
+    newl = DBC.pack "\r\n"
+    hdrtxt = fmap showHeader (headers msg)
+    hdrs = DBC.intercalate newl hdrtxt
+
+    in sipVersion msg
+       `DBC.append`  DBC.pack " "
+       `DBC.append`  DBC.pack (show (statusCode msg))
+       `DBC.append`  DBC.pack " "
+       `DBC.append`  reasonPhrase msg
+       `DBC.append`  newl
+       `DBC.append`  hdrs
+       `DBC.append`  newl
+       `DBC.append`  newl
+       `DBC.append`  body msg
+
+  Request {} -> let
+    newl = DBC.pack "\r\n"
+    hdrtxt = fmap showHeader (headers msg)
+    hdrs = DBC.intercalate newl hdrtxt
+    in reqMethod msg
+       `DBC.append`  DBC.pack " "
+       `DBC.append`  uriScheme msg
+       `DBC.append`  DBC.pack ":"
+       `DBC.append`  reqUri msg
+       `DBC.append`  DBC.pack ":"
+       `DBC.append`  sipVersion msg
+       `DBC.append`  newl
+       `DBC.append`  hdrs
+       `DBC.append`  newl
+       `DBC.append`  newl
+       `DBC.append`  body msg
+
+  BadMessage -> DBC.pack "bad message!"
 
 answer :: SipMessage -> [DBC.ByteString]
 answer msg = map buildOutput

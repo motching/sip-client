@@ -49,6 +49,6 @@ drawUI :: TVar UIData -> IO ()
 drawUI td = do
   tdFinal <- atomically $ readTVar td
   waitForChange tdFinal td
-  callCommand "clear"
+  --callCommand "clear"
   print tdFinal
   drawUI td

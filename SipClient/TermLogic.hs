@@ -19,7 +19,6 @@ getNewUID rm uid = case rm of
 listen :: Socket -> TVar UIData -> IO ()
 listen sock uiData = do
   (msg, sender) <- recvFrom sock 1024
-  print sender
   --TODO because we don't have state handling yet, we batch reply messages
   let parsedMsg = P.checkInput $ P.parseInput msg
   let rm = getMethodType

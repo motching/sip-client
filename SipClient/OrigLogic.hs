@@ -5,6 +5,7 @@ import SipClient.Types
 import qualified SipClient.UdpConnection as UDP
 import SipClient.UI
 
+import qualified Data.ByteString.Char8 as DBC
 import qualified Data.Bits as Bit
 import Data.Word
 import Control.Concurrent.STM
@@ -28,7 +29,9 @@ defaultRecipient = SockAddrInet 5060 (packIP 127 0 0 1)
 
 makeCall :: Socket -> TVar UIData -> IO ()
 makeCall sock uiData =  do
-  let invite = return $ B.buildOutput B.newInvite
+  let invite = replicate 1 (B.buildOutput B.newInvite)
+  putStrLn "poop"
+  print invite
+  putStrLn "peep"
   _ <- UDP.sendMessages sock invite defaultRecipient
   refreshUI Orig INVITE uiData
-  return ()

@@ -19,7 +19,8 @@ data SipMessage = Request
   , reasonPhrase :: DBC.ByteString
   , headers :: [Header]
   , body :: DBC.ByteString
-  } | BadMessage
+  }
+  | BadMessage
   deriving (Show)
 
 type ResponseCode = Int
