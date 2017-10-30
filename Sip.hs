@@ -1,6 +1,5 @@
 import SipClient.Log
-import qualified SipClient.TermLogic as Term
-import qualified SipClient.OrigLogic as Orig
+import qualified SipClient.Transaction as Trans
 import SipClient.Types
 import SipClient.UdpConnection
 import SipClient.UI
@@ -19,7 +18,7 @@ main = do
    initUI
    _ <- forkIO $ drawUI uiData
    sock <- newSocket
-   _ <- forkIO $ Term.listen sock uiData
-   Orig.wait sock uiData
+   _ <- forkIO $ Trans.listenOnUdp sock uiData
+   Trans.waitForInput sock uiData
    exitUI
    return ()

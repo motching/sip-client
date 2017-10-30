@@ -1,15 +1,17 @@
-module SipClient.OrigLogic where
+module SipClient.Transaction where
 
 import qualified SipClient.Builder as B
-import qualified SipClient.TermLogic as Term
+import qualified SipClient.Parser as P
 import SipClient.Types
 import qualified SipClient.UdpConnection as UDP
 import SipClient.UI
 
 import qualified Data.Bits as Bit
+import qualified Data.ByteString.Char8 as DBC
 import Data.Word
 import Control.Concurrent.STM
-import Network.Socket
+import Network.Socket hiding (send, sendTo, recv, recvFrom)
+import Network.Socket.ByteString
 
 waitForInput :: Socket -> TVar UIData -> IO ()
 waitForInput sock uiData = do
@@ -32,4 +34,22 @@ makeCall sock uiData =  do
   let invite = replicate 1 (B.buildOutput B.newInvite)
   _ <- UDP.sendMessages sock invite defaultRecipient
   refreshUI Orig INVITE uiData
-  Term.listen sock uiData
+  listenOnUdp sock uiData
+
+getNewUID :: ReqMethod -> UIData -> UIData
+getNewUID rm uid = case rm of
+              INVITE -> addInCall uid
+              _ -> uid
+
+listenOnUdp :: Socket -> TVar UIData -> IO ()
+listenOnUdp sock uiData = do
+  (msg, sender) <- recvFrom sock 1024
+  --TODO because we don't have state handling yet, we batch reply messages
+  let parsedMsg = P.checkInput $ P.parseInput msg
+  let rm = getMethodType
+        $ DBC.unpack
+        $ reqMethod parsedMsg
+  refreshUI Term rm uiData
+  let replies = B.answer parsedMsg --from here it's pure
+  _ <- UDP.sendMessages sock replies sender
+  listenOnUdp sock uiData

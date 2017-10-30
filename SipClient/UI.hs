@@ -1,6 +1,5 @@
 module SipClient.UI where
 
-import qualified SipClient.OrigLogic
 import SipClient.Types
 
 import Control.Monad
