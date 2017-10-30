@@ -44,8 +44,8 @@ parseHeaders :: AB.Parser [Header]
 parseHeaders =  AC.manyTill parseHeader (AB.string (DBC.pack "\r\n"))
            --     <* AB.string (DBC.pack "\r\n")
 
-parseSipMessage :: AB.Parser SipMessage
-parseSipMessage = do
+parseRequest :: AB.Parser SipMessage
+parseRequest = do
     method <-parseTill isSpace
     scheme <- parseTill isColon
     uri <- parseTill isSpace
@@ -69,9 +69,24 @@ parseSipMessage = do
                    , body = b
                     }
 
---TODO more elegant syntax for naming record fields?
+parseResponse :: AB.Parser SipMessage
+parseResponse = do
+  version <- parseTill isSpace
+  scode <- parseTill isSpace
+  rphrase <- parseTill isEndOfLine
+  hdrs <- parseHeaders
+  b <- AB.takeByteString
 
-    -- let headers = [(CallId, DBC.pack "call-id")]
-    -- let body = DBC.pack "body"
+  return  Response { sipVersion = version
+                   , statusCode = read $ DBC.unpack scode
+                   , reasonPhrase = rphrase
+                   , headers = hdrs
+                   , body = b
+                   }
 
-    -- return Request method scheme uri version headers body
+parseSipMessage :: AB.Parser SipMessage
+parseSipMessage = do
+  firstThree <- AC.lookAhead $ AB.take 3
+  if firstThree == DBC.pack "SIP"
+    then parseResponse
+    else parseRequest

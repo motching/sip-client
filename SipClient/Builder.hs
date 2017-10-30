@@ -15,7 +15,18 @@ newInvite = Request { reqMethod = DBC.pack "INVITE"
                     , uriScheme = DBC.pack "sip"
                     , reqUri = DBC.pack "bela@kocsma.hu"
                     , sipVersion = DBC.pack "SIP/2.0"
-                    , headers = []
+                    , headers = [(CallId, DBC.pack "sipstation@127.0.0.1")
+                                ,(CSeq, DBC.pack "1 INVITE")]
+                    , body = DBC.pack "body"
+                    }
+
+newAck :: SipMessage
+newAck = Request { reqMethod = DBC.pack "ACK"
+                    , uriScheme = DBC.pack "sip"
+                    , reqUri = DBC.pack "bela@kocsma.hu"
+                    , sipVersion = DBC.pack "SIP/2.0"
+                    , headers = [(CallId, DBC.pack "sipstation@127.0.0.1")
+                                ,(CSeq, DBC.pack "2 ACK")]
                     , body = DBC.pack "body"
                     }
 
@@ -54,9 +65,10 @@ new200OK  msg = Response { sipVersion = sipVersion msg
 
 constructReply :: SipMessage -> [SipMessage]
 constructReply m | trace (show m ++ "\n") False = undefined
-constructReply msg = let
-  method = reqMethod msg
-  ans = case DBC.unpack method of
+constructReply msg = case msg of
+  Request {} -> let
+    method = reqMethod msg
+    ans = case DBC.unpack method of
         "INVITE" -> [new100Trying msg
                     ,new180Ringing msg
                     ,new183SessionProgress msg
@@ -64,7 +76,15 @@ constructReply msg = let
                     ]
         "BYE" -> [new200OK msg]
         _        -> []
-  in ans
+    in ans
+  Response {} -> let
+    scode = statusCode msg
+    ans = case scode of
+      200 -> [newAck]
+      _ -> []
+    in ans
+  _ -> [BadMessage]
+
 
 showHeader :: Header -> DBC.ByteString
 showHeader hdr = DBC.pack  (getHeaderText (fst hdr))
