@@ -2,13 +2,13 @@ module SipClient.Builder where
 
 import SipClient.Types
 
+import Data.List
 import Debug.Trace
 import qualified Data.ByteString.Char8 as DBC
 --TODO import Builder? probably overkill
 
 assembleHeaders :: [Header] -> [Header]
 assembleHeaders hdrs = hdrs
---assembleHeaders hdrs = [(Via, DBC.pack "oops")]--hdrs
 
 newInvite :: SipMessage
 newInvite = Request { reqMethod = DBC.pack "INVITE"
@@ -27,6 +27,16 @@ newAck = Request { reqMethod = DBC.pack "ACK"
                     , sipVersion = DBC.pack "SIP/2.0"
                     , headers = [(CallId, DBC.pack "sipstation@127.0.0.1")
                                 ,(CSeq, DBC.pack "2 ACK")]
+                    , body = DBC.pack "body"
+                    }
+
+newBye :: SipMessage
+newBye = Request { reqMethod = DBC.pack "BYE"
+                    , uriScheme = DBC.pack "sip"
+                    , reqUri = DBC.pack "bela@kocsma.hu"
+                    , sipVersion = DBC.pack "SIP/2.0"
+                    , headers = [(CallId, DBC.pack "sipstation@127.0.0.1")
+                                ,(CSeq, DBC.pack "2 BYE")]
                     , body = DBC.pack "body"
                     }
 
@@ -64,7 +74,7 @@ new200OK  msg = Response { sipVersion = sipVersion msg
 
 
 constructReply :: SipMessage -> [SipMessage]
-constructReply m | trace (show m ++ "\n") False = undefined
+--constructReply m | trace (show m ++ "\n") False = undefined
 constructReply msg = case msg of
   Request {} -> let
     method = reqMethod msg
@@ -79,8 +89,15 @@ constructReply msg = case msg of
     in ans
   Response {} -> let
     scode = statusCode msg
+    cseq = DBC.unpack
+           $ snd
+           $ head
+           $ filter (\h -> fst h == CSeq) (headers msg)
     ans = case scode of
-      200 -> [newAck]
+      200 -> if "BYE" `isInfixOf` cseq
+             then []
+             else [newAck
+                  ,newBye]
       _ -> []
     in ans
   _ -> [BadMessage]

@@ -34,10 +34,12 @@ parseTill cond = AB.takeTill cond <* AB.skipWhile cond
 parseHeader :: AB.Parser Header
 parseHeader = do
   hname <- parseTill isColon --TODO isColon || isSpace..some functor stuff
-  _ <- parseTill isSpace
+  --TODO spaces
   hvalue <- AB.takeTill isEndOfLine
             <* AB.skip isEndOfLine
             <* AB.skip isEndOfLine --TODO this is a bad hack, consume \r\n
+  trace ("\nhname: " ++ show hname) return ()
+  trace ("\nhvalue: " ++ show hvalue) return ()
   return (getHeaderNameFromText hname, hvalue)
 
 parseHeaders :: AB.Parser [Header]
@@ -76,6 +78,12 @@ parseResponse = do
   rphrase <- parseTill isEndOfLine
   hdrs <- parseHeaders
   b <- AB.takeByteString
+
+  trace ("\nversion: " ++ show version) return ()
+  trace ("\nscode: " ++ show scode) return ()
+  trace ("\nrphrase: " ++ show rphrase) return ()
+  trace ("\nhdrs: " ++ show hdrs) return ()
+  trace ("\nb: " ++ show b) return ()
 
   return  Response { sipVersion = version
                    , statusCode = read $ DBC.unpack scode

@@ -16,6 +16,7 @@ waitForInput :: Socket -> TVar UIData -> IO ()
 waitForInput sock uiData = do
   command <- getChar
   case command of
+    'b' -> stopCall sock uiData
     'c' -> startCall sock uiData
     _  -> waitForInput sock uiData
 
@@ -36,11 +37,18 @@ startCall sock uiData =  do
   refreshUI Orig invite uiData
   listenOnUdp Orig sock uiData
 
+stopCall :: Socket -> TVar UIData -> IO ()
+stopCall sock uiData = do
+  let bye = B.newBye
+  let rawBye = replicate 1 $ B.buildOutput bye
+  _ <- UDP.sendMessages sock rawBye defaultRecipient
+  refreshUI Orig bye uiData
+  waitForInput sock uiData
+
 getNewUID :: ReqMethod -> UIData -> UIData
 getNewUID rm uid = case rm of
               INVITE -> addInCall uid
               _ -> uid
-
 
 listenOnUdp :: TransDirection -> Socket -> TVar UIData -> IO ()
 listenOnUdp dir sock uiData = do
