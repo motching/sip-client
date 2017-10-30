@@ -1,10 +1,29 @@
 module SipClient.UI where
 
+import qualified SipClient.OrigLogic
 import SipClient.Types
 
 import Control.Monad
 import Control.Concurrent.STM
-import System.Process
+import System.IO
+import System.Console.ANSI
+
+initUI :: IO ()
+initUI = do
+  hSetBuffering stdin NoBuffering
+  --clearScreen
+  --hideCursor
+  hSetEcho stdin False
+  setTitle "SIP station 0.1"
+
+exitUI :: IO ()
+exitUI = do
+  hSetEcho stdin True
+  --clearScreen
+  setCursorPosition 0 0
+  setSGR [Reset]
+  putStrLn "Bye!"
+  showCursor
 
 refreshUI :: TransDirection -> ReqMethod -> TVar UIData -> IO ()
 refreshUI dir rm uiData =
@@ -49,6 +68,6 @@ drawUI :: TVar UIData -> IO ()
 drawUI td = do
   tdFinal <- atomically $ readTVar td
   waitForChange tdFinal td
-  --callCommand "clear"
+  --clearScreen
   print tdFinal
   drawUI td

@@ -16,8 +16,10 @@ main :: IO ()
 main = do
    uiData <- atomically $ newTVar initData
    eraseAllLogs
+   initUI
    _ <- forkIO $ drawUI uiData
    sock <- newSocket
    _ <- forkIO $ Term.listen sock uiData
    Orig.wait sock uiData
+   exitUI
    return ()
