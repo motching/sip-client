@@ -12,6 +12,9 @@ import Control.Concurrent.STM
 import Network.Socket hiding (send, sendTo, recv, recvFrom)
 import Network.Socket.ByteString
 
+newTransaction :: Dialog -> ReqMethod -> TransDirection -> IO Dialog
+newTransaction currentDlg rm dir = undefined
+
 waitForInput :: Socket -> TVar UIData -> IO ()
 waitForInput sock uiData = do
   command <- getChar

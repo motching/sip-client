@@ -1,6 +1,10 @@
 module SipClient.Types where
 import qualified Data.ByteString.Char8 as DBC
 
+type Transaction = [SipMessage]
+
+type Dialog = [Transaction]
+
 type HeaderValue = DBC.ByteString
 
 type Header = (HeaderName, HeaderValue)
@@ -225,3 +229,4 @@ data UIData = Data
   { numOfInCalls :: Int
   , numOfOutCalls :: Int }
   deriving (Eq, Show)
+
