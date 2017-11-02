@@ -15,14 +15,6 @@ import Network.Socket.ByteString
 newTransaction :: Dialog -> ReqMethod -> TransDirection -> IO Dialog
 newTransaction currentDlg rm dir = undefined
 
-waitForInput :: Socket -> TVar UIData -> IO ()
-waitForInput sock uiData = do
-  command <- getChar
-  case command of
-    'b' -> stopCall sock uiData
-    'c' -> startCall sock uiData
-    _  -> waitForInput sock uiData
-
 packIP :: Int -> Int -> Int -> Int -> Word32
 packIP a b c d = Bit.shift (fromIntegral d) 24
                  + Bit.shift (fromIntegral c) 16
@@ -40,13 +32,13 @@ startCall sock uiData =  do
   refreshUI Orig invite uiData
   listenOnUdp Orig sock uiData
 
-stopCall :: Socket -> TVar UIData -> IO ()
-stopCall sock uiData = do
-  let bye = B.newBye
-  let rawBye = replicate 1 $ B.buildOutput bye
-  _ <- UDP.sendMessages sock rawBye defaultRecipient
-  refreshUI Orig bye uiData
-  waitForInput sock uiData
+-- stopCall :: Socket -> TVar UIData -> IO ()
+-- stopCall sock uiData = do
+--   let bye = B.newBye
+--   let rawBye = replicate 1 $ B.buildOutput bye
+--   _ <- UDP.sendMessages sock rawBye defaultRecipient
+--   refreshUI Orig bye uiData
+--   waitForInput sock uiData
 
 getNewUID :: ReqMethod -> UIData -> UIData
 getNewUID rm uid = case rm of
@@ -55,8 +47,8 @@ getNewUID rm uid = case rm of
 
 listenOnUdp :: TransDirection -> Socket -> TVar UIData -> IO ()
 listenOnUdp dir sock uiData = do
+  print "listening!"
   (msg, sender) <- recvFrom sock 1024
-  --TODO because we don't have state handling yet, we batch reply messages
   let parsedMsg = P.checkInput $ P.parseInput msg
   refreshUI dir parsedMsg uiData
   let replies = B.answer parsedMsg --from here it's pure

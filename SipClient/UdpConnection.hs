@@ -2,6 +2,7 @@ module SipClient.UdpConnection where
 
 import SipClient.Log
 
+import Control.Concurrent.STM
 import qualified Data.ByteString.Char8 as DBC
 import Network.Socket hiding (send, sendTo, recv, recvFrom)
 import Network.Socket.ByteString
@@ -25,3 +26,8 @@ logAndSend :: Socket -> DBC.ByteString -> SockAddr -> IO Int
 logAndSend sock reply recipient = do
   writeMsgLog $ DBC.unpack reply
   sendTo sock reply recipient
+
+listen :: Socket -> TMVar DBC.ByteString -> IO ()
+listen sock incoming = do
+  (msg, _) <- recvFrom sock 1024
+  atomically $ putTMVar incoming msg

@@ -1,7 +1,7 @@
+import qualified SipClient.Dialog as Dialog
 import SipClient.Log
-import qualified SipClient.Transaction as Trans
 import SipClient.Types
-import SipClient.UdpConnection
+import qualified SipClient.UdpConnection as Udp
 import SipClient.UI
 
 import Control.Concurrent
@@ -14,11 +14,11 @@ initData = Data { numOfInCalls = 0
 main :: IO ()
 main = do
    uiData <- atomically $ newTVar initData
+   incoming <- atomically newEmptyTMVar
    eraseAllLogs
    initUI
    _ <- forkIO $ drawUI uiData
-   sock <- newSocket
-   _ <- forkIO $ Trans.listenOnUdp Term sock uiData
-   Trans.waitForInput sock uiData
+   sock <- Udp.newSocket
+   _ <- forkIO $ Dialog.idle sock incoming
    exitUI
    return ()

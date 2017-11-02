@@ -229,4 +229,3 @@ data UIData = Data
   { numOfInCalls :: Int
   , numOfOutCalls :: Int }
   deriving (Eq, Show)
-

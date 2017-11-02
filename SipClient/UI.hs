@@ -8,6 +8,14 @@ import qualified Data.ByteString.Char8 as DBC
 import System.IO
 import System.Console.ANSI
 
+--TODO: checkInput
+waitForInput :: IO Char
+waitForInput = do
+  input <- getChar
+  case input of
+    'c' -> return 'c'
+    _   -> waitForInput
+
 initUI :: IO ()
 initUI = do
   hSetBuffering stdin NoBuffering
