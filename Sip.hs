@@ -11,7 +11,6 @@ initData :: UIData
 initData = Data { numOfInCalls = 0
                 , numOfOutCalls = 0 }
 
---comment
 main :: IO ()
 main = do
    uiData <- atomically $ newTVar initData
